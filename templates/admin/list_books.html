@@ -1,0 +1,64 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Manajemen Buku - Admin Digi Pustaka{% endblock %}
+
+{% block page_title %}Manajemen Buku{% endblock %}
+
+{% block content %}
+{# Tombol untuk menambah buku baru #}
+<div class="action-buttons" style="margin-bottom: 20px;">
+    {# --- PERBAIKAN: Menggunakan 'admin_add_book' --- #}
+    <a href="{{ url_for('admin_add_book') }}" class="btn btn-admin"> {# Menggunakan kelas btn-admin untuk konsistensi warna hijau #}
+        <i class="fas fa-plus"></i> Tambah Buku Baru
+    </a>
+</div>
+
+{# Wrapper agar tabel responsif di mobile #}
+<div class="table-responsive-wrapper">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 100px;">Cover</th>
+                <th>Judul Buku</th>
+                <th>Penulis</th>
+                <th>Kategori</th>
+                <th style="width: 80px;">Stok Fisik</th>
+                <th>Jenis</th>
+                <th style="width: 180px;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if books %}
+                {% for book in books %}
+                <tr>
+                    <td>
+                        {% if book['cover_image_path'] %}
+                        <img src="{{ url_for('static', filename=book['cover_image_path']) }}" alt="Cover {{ book['judul'] }}" style="width: 80px; height: auto; max-height:110px; object-fit:cover; border-radius: 4px;">
+                        {% else %}
+                        <div style="width: 80px; height: 110px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                            <span style="font-size: 0.8em; color: #999;">No Cover</span>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>{{ book['judul'] }}</td>
+                    <td>{{ book['pengarang'] | default('-') }}</td>
+                    <td>{{ book['nama_kategori'] | default('Belum Dikategorikan') }}</td>
+                    <td style="text-align: center;">{{ book['stok_fisik'] if book['jenis_buku'] == 'fisik' else '-' }}</td>
+                    <td>{{ book['jenis_buku'] | title }}</td>
+                    <td class="action-buttons">
+                        <a href="{{ url_for('admin_edit_book', book_id=book['book_id']) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ url_for('admin_delete_book', book_id=book['book_id']) }}" method="post" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku \'{{ book['judul'] }}\'? Data peminjaman terkait juga akan dihapus.');">
+                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 20px;">Belum ada buku di perpustakaan.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+# Lingkungan Virtual Python
+venv/
+.venv/
+ENV/
+env/
+*/venv/
+*/.venv/
+*/ENV/
+*/env/
+env.bak/
+venv.bak/
+
+# File Bytecode Python dan cache
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# Database SQLite
+# (Pilih salah satu atau keduanya tergantung lokasi database Anda)
+digipustaka.db
+instance/digipustaka.db 
+# Jika Anda menggunakan nama file database lain atau ekstensi lain
+# *.sqlite
+# *.sqlite3
+# *.db3
+
+# File spesifik Flask/Werkzeug
+instance/*
+!instance/.gitkeep # Jika Anda ingin folder instance tetap ada tapi isinya diabaikan
+
+# File konfigurasi lokal dan file sensitif
+.env
+*.env
+config.py # Jika config.py Anda berisi kunci rahasia dan tidak untuk di-share
+secrets.py
+credentials.json
+*.pem
+*.key
+
+# File IDE dan editor
+.vscode/
+.idea/
+*.project
+*.pydevproject
+.project
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# File spesifik OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# File log
+*.log
+logs/
+*.log.*
+
+# File upload (jika Anda tidak ingin mengunggah konten folder uploads)
+# Jika Anda ingin folder uploads tetap ada tapi isinya diabaikan,
+# Anda bisa membuat file .gitkeep di dalam setiap subfolder uploads.
+# Contoh:
+# static/uploads/covers/*
+# !static/uploads/covers/.gitkeep
+# static/uploads/ebooks/*
+# !static/uploads/ebooks/.gitkeep
+# static/uploads/profile_photos/*
+# !static/uploads/profile_photos/.gitkeep
+# Atau, jika Anda yakin tidak ingin mengunggah file apapun dari uploads:
+# static/uploads/
+
+# File build dan distribusi Python
+build/
+dist/
+*.egg-info/
+*.egg
+wheels/
+pip-wheel-metadata/
+
+# tambahan
+venv/
+__pycache__/
+*.pyc
+*.db
+*.sqlite3
+.env
+.env.*
+static/uploads/

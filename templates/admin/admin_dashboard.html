@@ -1,0 +1,166 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Dashboard Staf - Digi Pustaka{% endblock %}
+
+{% block page_title %}
+    Dashboard 
+    {% if g_user.role == 'admin' %}
+        Admin Utama
+    {% elif g_user.role == 'pustakawan' %}
+        Pustakawan
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <div class="stat-icon icon-books"><i class="fas fa-book"></i></div>
+        <div class="stat-info">
+            <h4>Total Buku</h4>
+            <div class="stat-value">{{ total_buku | default(0) }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-users"><i class="fas fa-users"></i></div>
+        <div class="stat-info">
+            <h4>Anggota Aktif</h4>
+            <div class="stat-value">{{ total_anggota_aktif | default(0) }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-loans"><i class="fas fa-exchange-alt"></i></div>
+        <div class="stat-info">
+            <h4>Peminjaman Aktif</h4>
+            <div class="stat-value">{{ total_peminjaman_aktif | default(0) }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-pending"><i class="fas fa-hourglass-half"></i></div>
+        <div class="stat-info">
+            <h4>Permintaan Pinjaman</h4>
+            <div class="stat-value">{{ total_permintaan_pending | default(0) }}</div>
+        </div>
+    </div>
+    {% if g_user.role == 'admin' %}
+    <div class="stat-card">
+        <div class="stat-icon icon-librarians"><i class="fas fa-user-tie"></i></div>
+        <div class="stat-info">
+            <h4>Pustakawan Aktif</h4>
+            <div class="stat-value">{{ total_pustakawan_aktif | default(0) }}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon icon-action-requests"><i class="fas fa-tasks"></i></div>
+        <div class="stat-info">
+            <h4>Permintaan Aksi Pending</h4>
+            <div class="stat-value">{{ total_user_action_requests_pending | default(0) }}</div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{# Grid Menu Akses Cepat #}
+<div class="admin-menu-grid">
+    <div class="menu-item">
+        <a href="{{ url_for('admin_add_book') }}">
+            <span class="menu-icon icon-add"><i class="fas fa-plus-circle"></i></span>Tambah Buku Baru
+        </a>
+    </div>
+    <div class="menu-item">
+        <a href="{{ url_for('admin_list_books') }}">
+            <span class="menu-icon icon-list"><i class="fas fa-list-ul"></i></span>Daftar Buku
+        </a>
+    </div>
+     <div class="menu-item">
+        <a href="{{ url_for('admin_pending_loans') }}">
+            <span class="menu-icon icon-confirm"><i class="fas fa-user-clock"></i></span>Konfirmasi Peminjaman
+        </a>
+    </div>
+    <div class="menu-item">
+        <a href="{{ url_for('admin_active_loans') }}">
+            <span class="menu-icon icon-active-loans"><i class="fas fa-book-reader"></i></span>Peminjaman Aktif
+        </a>
+    </div>
+    {% if g_user.role == 'admin' %}
+        <div class="menu-item">
+            <a href="{{ url_for('admin_list_users') }}">
+                <span class="menu-icon icon-users-manage"><i class="fas fa-users-cog"></i></span>Manajemen Pengguna
+            </a>
+        </div>
+        <div class="menu-item">
+            <a href="{{ url_for('admin_laporan_baru') }}"
+                <span class="menu-icon icon-reports"><i class="fas fa-chart-pie"></i></span>Lihat Laporan
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="recent-activities">
+    <h3>Aktivitas Terbaru</h3>
+    <ul class="activity-list">
+        {% if recent_activities %}
+            {% for activity in recent_activities %}
+            <li>
+                {{ activity.description }}
+                {% if activity.timestamp_dt %}
+                <span class="timestamp">{{ activity.timestamp_dt.strftime('%d %B %Y, %H:%M') }}</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        {% else %}
+            <li class="no-data" style="background-color: transparent; box-shadow: none;">
+                Belum ada aktivitas terbaru untuk ditampilkan.
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+<!-- Ranking Pembaca Teraktif -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>🏆 Ranking Pembaca Teraktif</h5>
+    </div>
+
+    <div class="card-body">
+        {% if ranking_pembaca %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Ranking</th>
+                        <th>Nama Pembaca</th>
+                        <th>Jumlah Buku Dibaca</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for pembaca in ranking_pembaca %}
+                    <tr>
+                        <td>
+                            {% if loop.index == 1 %}
+                                🥇
+                            {% elif loop.index == 2 %}
+                                🥈
+                            {% elif loop.index == 3 %}
+                                🥉
+                            {% else %}
+                                {{ loop.index }}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ pembaca['nama_lengkap'] }}
+                        </td>
+
+                        <td>
+                            {{ pembaca['jumlah_baca'] }} buku
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Belum ada data pembaca.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
