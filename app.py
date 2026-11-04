@@ -21,17 +21,28 @@ app = Flask(__name__)
 DATABASE = 'digipustaka.db'
 app.secret_key = 'ganti_dengan_kunci_rahasia_super_aman_dan_unik_milik_anda_123!@#'
 
+
 # Konfigurasi Path dan Folder Upload
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_FOLDER = os.path.join(APP_ROOT, 'static')
-UPLOAD_FOLDER_COVER = os.path.join(STATIC_FOLDER, 'uploads', 'covers')
-UPLOAD_FOLDER_EBOOK = os.path.join(STATIC_FOLDER, 'uploads', 'ebooks')
-UPLOAD_FOLDER_PROFILE = os.path.join(STATIC_FOLDER, 'uploads', 'profile_photos')
+
+# Gunakan /tmp saat berjalan di Vercel
+if os.environ.get('VERCEL'):
+    UPLOAD_BASE = '/tmp/pustakaku_uploads'
+else:
+    UPLOAD_BASE = os.path.join(STATIC_FOLDER, 'uploads')
+
+UPLOAD_FOLDER_COVER = os.path.join(UPLOAD_BASE, 'covers')
+UPLOAD_FOLDER_EBOOK = os.path.join(UPLOAD_BASE, 'ebooks')
+UPLOAD_FOLDER_PROFILE = os.path.join(UPLOAD_BASE, 'profile_photos')
+
 ALLOWED_EXTENSIONS_IMAGE = {'png', 'jpg', 'jpeg', 'gif'}
 ALLOWED_EXTENSIONS_EBOOK = {'pdf', 'epub', 'mobi'}
+
 app.config['UPLOAD_FOLDER_COVER'] = UPLOAD_FOLDER_COVER
 app.config['UPLOAD_FOLDER_EBOOK'] = UPLOAD_FOLDER_EBOOK
 app.config['UPLOAD_FOLDER_PROFILE'] = UPLOAD_FOLDER_PROFILE
+
 os.makedirs(UPLOAD_FOLDER_COVER, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER_EBOOK, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER_PROFILE, exist_ok=True)
