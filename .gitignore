@@ -19,8 +19,7 @@ __pycache__/
 
 # Database SQLite
 # (Pilih salah satu atau keduanya tergantung lokasi database Anda)
-digipustaka.db
-instance/digipustaka.db 
+
 # Jika Anda menggunakan nama file database lain atau ekstensi lain
 # *.sqlite
 # *.sqlite3
@@ -85,7 +84,7 @@ pip-wheel-metadata/
 venv/
 __pycache__/
 *.pyc
-*.db
+
 *.sqlite3
 .env
 .env.*
